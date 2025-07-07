@@ -31,7 +31,7 @@ namespace Windows_Form
             command.Parameters.AddWithValue("@loginUser", LoginUser);
             command.Parameters.AddWithValue("@password", Password);
             adapter.SelectCommand = command;
-             adapter.Fill(Table); 
+           //  adapter.Fill(Table); 
 
             if (Table.Rows.Count == 1)
             {

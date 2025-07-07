@@ -60,7 +60,7 @@
             LoginField.Font = new Font("Segoe UI", 11F, FontStyle.Regular, GraphicsUnit.Point, 0);
             LoginField.Location = new Point(472, 123);
             LoginField.Name = "LoginField";
-            LoginField.Size = new Size(282, 37);
+            LoginField.Size = new Size(282, 27);
             LoginField.TabIndex = 1;
             LoginField.TextChanged += LoginField_TextChanged;
             // 
@@ -69,17 +69,17 @@
             PassField.Font = new Font("Segoe UI", 11F, FontStyle.Regular, GraphicsUnit.Point, 0);
             PassField.Location = new Point(472, 216);
             PassField.Name = "PassField";
-            PassField.Size = new Size(282, 37);
+            PassField.Size = new Size(282, 27);
             PassField.TabIndex = 2;
             PassField.TextChanged += PassField_TextChanged;
             // 
             // label1
             // 
-            label1.Font = new Font("Castellar", 20F, FontStyle.Bold, GraphicsUnit.Point, 0);
+            label1.Font = new Font("Microsoft Sans Serif", 20F, FontStyle.Bold, GraphicsUnit.Point, 0);
             label1.ForeColor = Color.FromArgb(46, 62, 184);
-            label1.Location = new Point(347, 41);
+            label1.Location = new Point(506, 34);
             label1.Name = "label1";
-            label1.Size = new Size(518, 66);
+            label1.Size = new Size(226, 66);
             label1.TabIndex = 3;
             label1.Text = "Authentification";
             label1.Click += label1_Click;
@@ -96,7 +96,7 @@
             closeButton.Font = new Font("Segoe UI", 11F, FontStyle.Regular, GraphicsUnit.Point, 0);
             closeButton.Location = new Point(1115, 10);
             closeButton.Name = "closeButton";
-            closeButton.Size = new Size(26, 30);
+            closeButton.Size = new Size(18, 20);
             closeButton.TabIndex = 6;
             closeButton.Text = "X";
             closeButton.Click += closeButton_Click;
@@ -125,7 +125,7 @@
             // 
             // Form1
             // 
-            AutoScaleDimensions = new SizeF(11F, 28F);
+            AutoScaleDimensions = new SizeF(7F, 17F);
             AutoScaleMode = AutoScaleMode.Font;
             BackColor = Color.FromArgb(209, 17, 68);
             ClientSize = new Size(1178, 505);
