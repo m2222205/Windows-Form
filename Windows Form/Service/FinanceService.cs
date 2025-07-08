@@ -22,25 +22,40 @@ namespace Windows_Form.Service
             if (id <= 0)
                 throw new ArgumentException("Некорректный ID для удаления");
 
-            // Можно также проверить: существует ли запись с таким ID (опционально)
-            var allFinances = _repository.GetAll();
-            var financeToDelete = allFinances.FirstOrDefault(f => f.ID == id);
+            var financeToDelete = _repository.GetById(id);
 
             if (financeToDelete == null)
-                throw new Exception("Запись не найдена");
+                throw new InvalidOperationException("Запись не найдена");
 
             _repository.Delete(id);
         }
 
-        public void Add(Finance finance)
+        public int Add(Finance finance)
         {
-            if (finance == null) throw new ArgumentNullException("Property can not be null");
+            if (finance == null)
+                throw new ArgumentNullException("Поля не могут быть пустыми");
 
-            if (finance.Доход < 0 || finance.Расход < 0)
-                throw new ArgumentException("Доход и расход не могут быть отрицательными.");
-
-            _repository.Add(finance);
+            return _repository.Add(finance);
         }
+
+
+        public Finance Update(Finance finance)
+        {
+            if (finance.ID <= 0)
+                throw new ArgumentException("Некорректный ID для обновления");
+
+
+            _repository.Update(finance);
+
+            return _repository.GetById(finance.ID);
+        }
+
+        public List<Finance> GetAll()
+        {
+            return _repository.GetAll();
+        }
+
+
 
     }
 }

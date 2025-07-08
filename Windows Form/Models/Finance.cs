@@ -9,15 +9,17 @@ namespace Windows_Form.Models
     public class Finance
     {
         public int ID { get; set; }
-        public decimal Доход { get; set; }
-        public decimal Расход { get; set; }
-        public decimal Кредит { get; set; }
-        public decimal Дебит { get; set; }
-        public decimal Зарплата { get; set; }
+        public decimal Amount { get; set; }
+        public DateTime Date { get; set; }
+        public decimal SalaryPercent { get; set; }
+        public decimal BalanceAfter { get; set; }
+        public bool IsCredit { get; set; }
+        public bool IsDebit { get; set; }
 
-        public int CategoryId { get; set; }
-        public Category Categories { get; set; } // навига
-
+        public int TypeId { get; set; }
+        public int CategoryId { get; set; }  
+        public Category Categories { get; set; }
+        public TransactionType TransactionType { get; internal set; }
     }
 
 }
