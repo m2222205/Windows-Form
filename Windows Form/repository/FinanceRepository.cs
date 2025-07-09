@@ -21,7 +21,7 @@ namespace Windows_Form.repository
                 cmd.CommandType = CommandType.StoredProcedure;
 
                 cmd.Parameters.AddWithValue("@Amount", finance.Amount);
-                cmd.Parameters.AddWithValue("@TypeId", finance.TypeId); 
+                cmd.Parameters.AddWithValue("@TypeId", finance.TypeId);
                 cmd.Parameters.AddWithValue("@Date", finance.Date);
                 cmd.Parameters.AddWithValue("@SalaryPercent", finance.SalaryPercent);
                 cmd.Parameters.AddWithValue("@BalanceAfter", finance.BalanceAfter);
@@ -54,7 +54,7 @@ namespace Windows_Form.repository
 
                 cmd.Parameters.AddWithValue("@ID", finance.ID);
                 cmd.Parameters.AddWithValue("@Amount", finance.Amount);
-                cmd.Parameters.AddWithValue("@TypeId", finance.TypeId); 
+                cmd.Parameters.AddWithValue("@TypeId", finance.TypeId);
                 cmd.Parameters.AddWithValue("@Date", finance.Date);
                 cmd.Parameters.AddWithValue("@SalaryPercent", finance.SalaryPercent);
                 cmd.Parameters.AddWithValue("@BalanceAfter", finance.BalanceAfter);
@@ -82,47 +82,68 @@ namespace Windows_Form.repository
         }
 
 
-
         public List<Finance> GetAll()
         {
             List<Finance> list = new List<Finance>();
 
-            SqlConnection conn = db.getConnection();
+            // Этот код (который вы мне предоставили) ДОЛЖЕН БЫТЬ ЗДЕСЬ
+            SqlConnection conn = db.getConnection(); // Получаем соединение
             using (SqlCommand cmd = new SqlCommand("GetAllFinanceWithCategory", conn))
             {
                 cmd.CommandType = CommandType.StoredProcedure;
-                conn.Open();
 
-                SqlDataReader reader = cmd.ExecuteReader();
-                while (reader.Read())
+                if (conn.State == ConnectionState.Closed)
                 {
-                    list.Add(new Finance
-                    {
-                        ID = Convert.ToInt32(reader["ID"]),
-                        Amount = Convert.ToDecimal(reader["Amount"]),
-                        TypeId = Convert.ToInt32(reader["Type"]),
-                        Date = Convert.ToDateTime(reader["Date"]),
-                        SalaryPercent = reader["SalaryPercent"] != DBNull.Value ? Convert.ToDecimal(reader["SalaryPercent"]) : 0,
-                        BalanceAfter = reader["BalanceAfter"] != DBNull.Value ? Convert.ToDecimal(reader["BalanceAfter"]) : 0,
-                        IsCredit = Convert.ToBoolean(reader["IsCredit"]),
-                        IsDebit = Convert.ToBoolean(reader["IsDebit"]),
-                        TransactionType = new TransactionType
-                        {
-                            Id = Convert.ToInt32(reader["TypeId"]),
-                            Name = reader["TransactionTypeName"].ToString()
-                        },
-                        Categories = new Category
-                        {
-                            Id = Convert.ToInt32(reader["CategoryId"]),
-                            Name = reader["CategoryName"].ToString()
-                        }
+                    conn.Open();
+                }
 
-                    });
+                SqlDataReader reader = null;
+                try
+                {
+                    reader = cmd.ExecuteReader();
+                    while (reader.Read())
+                    {
+                        list.Add(new Finance
+                        {
+                            ID = Convert.ToInt32(reader["ID"]),
+                            Amount = Convert.ToDecimal(reader["Сумма"]), // Читаем по псевдониму "Сумма"
+
+                            TransactionType = new TransactionType
+                            {
+                                Id = reader["_TypeId"] != DBNull.Value ? Convert.ToInt32(reader["_TypeId"]) : 0,
+                                Name = reader["Тип Операции"] != DBNull.Value ? reader["Тип Операции"].ToString() : string.Empty
+                            },
+                            Categories = new Category
+                            {
+                                Id = reader["_CategoryId"] != DBNull.Value ? Convert.ToInt32(reader["_CategoryId"]) : 0,
+                                Name = reader["Категория"] != DBNull.Value ? reader["Категория"].ToString() : string.Empty
+                            },
+
+                            Date = Convert.ToDateTime(reader["Дата"]),
+                            SalaryPercent = reader["Процент Зарплаты"] != DBNull.Value ? Convert.ToDecimal(reader["Процент Зарплаты"]) : 0m,
+                            BalanceAfter = reader["Баланс После"] != DBNull.Value ? Convert.ToDecimal(reader["Баланс После"]) : 0m,
+                            IsCredit = Convert.ToBoolean(reader["Кредит"]),
+                            IsDebit = Convert.ToBoolean(reader["Дебит"])
+                        });
+                    }
+                }
+                finally
+                {
+                    if (reader != null && !reader.IsClosed)
+                    {
+                        reader.Close();
+                    }
+                    if (conn.State == ConnectionState.Open)
+                    {
+                        conn.Close();
+                    }
                 }
             }
-
             return list;
         }
+
+
+
 
         public Finance GetById(int id)
         {
@@ -192,6 +213,6 @@ namespace Windows_Form.repository
 
 
 
-
     }
+
 }

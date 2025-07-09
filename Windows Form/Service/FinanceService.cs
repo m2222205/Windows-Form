@@ -22,11 +22,6 @@ namespace Windows_Form.Service
             if (id <= 0)
                 throw new ArgumentException("Некорректный ID для удаления");
 
-            var financeToDelete = _repository.GetById(id);
-
-            if (financeToDelete == null)
-                throw new InvalidOperationException("Запись не найдена");
-
             _repository.Delete(id);
         }
 

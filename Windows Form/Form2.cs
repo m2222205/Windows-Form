@@ -20,12 +20,14 @@ namespace Windows_Form
         public Form2()
         {
             InitializeComponent();
+            SetupDataGridView();
             service = new FinanceService();
+            LoadFinanceData();
         }
 
         private void Form2_Load(object sender, EventArgs e)
         {
-           LoadFinanceData();
+            LoadFinanceData();
         }
 
         private void Delete_Button_Click(object sender, EventArgs e)
@@ -48,59 +50,56 @@ namespace Windows_Form
         }
 
 
+        private void SetupDataGridView()
+        {
+            // Отключаем автоматическую генерацию колонок.
+            // Это КЛЮЧЕВОЙ ШАГ, который позволит нам вручную управлять колонками.
+            dataGridView1.AutoGenerateColumns = false;
+
+            // Очищаем все существующие колонки, если они были добавлены через дизайнер или ранее в коде.
+            dataGridView1.Columns.Clear();
+
+            // Добавляем колонки вручную
+            dataGridView1.Columns.Add(new DataGridViewTextBoxColumn { Name = "ID", HeaderText = "ID", DataPropertyName = "ID" });
+            dataGridView1.Columns.Add(new DataGridViewTextBoxColumn { Name = "Amount", HeaderText = "Сумма", DataPropertyName = "Amount" });
+
+            // Для TransactionType.Name
+            dataGridView1.Columns.Add(new DataGridViewTextBoxColumn { Name = "TransactionTypeName", HeaderText = "Тип Операции", DataPropertyName = "TransactionType.Name" });
+            // Для Categories.Name
+            dataGridView1.Columns.Add(new DataGridViewTextBoxColumn { Name = "CategoryName", HeaderText = "Категория", DataPropertyName = "Categories.Name" });
+
+            dataGridView1.Columns.Add(new DataGridViewTextBoxColumn { Name = "Date", HeaderText = "Дата", DataPropertyName = "Date" });
+            dataGridView1.Columns.Add(new DataGridViewTextBoxColumn { Name = "SalaryPercent", HeaderText = "Процент Зарплаты", DataPropertyName = "SalaryPercent" });
+            dataGridView1.Columns.Add(new DataGridViewTextBoxColumn { Name = "BalanceAfter", HeaderText = "Баланс После", DataPropertyName = "BalanceAfter" });
+
+            // Для булевых полей лучше использовать DataGridViewCheckBoxColumn
+            dataGridView1.Columns.Add(new DataGridViewCheckBoxColumn { Name = "IsCredit", HeaderText = "Кредит?", DataPropertyName = "Кредит" });
+            dataGridView1.Columns.Add(new DataGridViewCheckBoxColumn { Name = "IsDebit", HeaderText = "Дебит?", DataPropertyName = "Дебит" });
+
+            // Опционально: Скрытие ID вложенных объектов, если они не нужны для отображения
+            // Если вам не нужно отображать ID для типов и категорий, но они нужны для логики
+            // Вы можете добавить их как скрытые колонки:
+            // dataGridView1.Columns.Add(new DataGridViewTextBoxColumn { Name = "TransactionTypeId", HeaderText = "TypeId", DataPropertyName = "TransactionType.Id", Visible = false });
+            // dataGridView1.Columns.Add(new DataGridViewTextBoxColumn { Name = "CategoryId", HeaderText = "CategoryId", DataPropertyName = "Categories.Id", Visible = false });
+        }
+
         private void LoadFinanceData()
         {
-           
             try
             {
-                // 1. Очищаем предыдущие столбцы перед новой привязкой данных
-                // Это важно, чтобы DataGridView мог корректно перестроить столбцы
-                // на основе нового DataSource.
-                dataGridView1.Columns.Clear();
+                // Вызовите SetupDataGridView один раз, например, в конструкторе формы или Form_Load
+                // Если вы уже вызываете Columns.Clear() и DataSource = data, то AutoGenerateColumns = false
+                // и ручное добавление колонок - это единственный путь.
 
-                // 2. Получаем список финансовых записей из базы данных
                 var data = service.GetAll();
-
-                // 3. Привязываем данные к DataGridView.
-                // DataGridView автоматически создаст столбцы для всех публичных свойств в классе Finance.
                 dataGridView1.DataSource = data;
 
-                // 4. Опциональная настройка столбцов (после того, как они автоматически создались):
-
-                // Переименование заголовков на русский язык
-                // Проверяем существование столбца перед его изменением, чтобы избежать ошибок.
-                if (dataGridView1.Columns.Contains("ID")) dataGridView1.Columns["ID"].HeaderText = "ID";
-                if (dataGridView1.Columns.Contains("Amount")) dataGridView1.Columns["Amount"].HeaderText = "Сумма";
-                if (dataGridView1.Columns.Contains("TypeId")) dataGridView1.Columns["TypeId"].HeaderText = "Тип"; // Или "Тип Операции"
-                if (dataGridView1.Columns.Contains("CategoryId")) dataGridView1.Columns["CategoryId"].HeaderText = "Категория";
-                if (dataGridView1.Columns.Contains("Date")) dataGridView1.Columns["Date"].HeaderText = "Дата"; // <<--- Вот ваш столбец с датой
-                if (dataGridView1.Columns.Contains("SalaryPercent")) dataGridView1.Columns["SalaryPercent"].HeaderText = "Процент Зарплаты";
-                if (dataGridView1.Columns.Contains("BalanceAfter")) dataGridView1.Columns["BalanceAfter"].HeaderText = "Баланс После";
-                if (dataGridView1.Columns.Contains("IsCredit")) dataGridView1.Columns["IsCredit"].HeaderText = "Кредит?"; // Или "Кредит"
-                if (dataGridView1.Columns.Contains("IsDebit")) dataGridView1.Columns["IsDebit"].HeaderText = "Дебит?";   // Или "Дебит"
-                if (dataGridView1.Columns.Contains("Income")) dataGridView1.Columns["Income"].HeaderText = "Доход";
-                if (dataGridView1.Columns.Contains("Expense")) dataGridView1.Columns["Expense"].HeaderText = "Расход";
-
-
-                // 5. Опционально: Форматирование столбца даты (если нужно специфичное отображение)
+                // Форматирование столбца даты
                 if (dataGridView1.Columns.Contains("Date"))
                 {
-                    // Устанавливаем формат для столбца "Date"
-                    // Например, "dd.MM.yyyy" для 09.07.2025
-                    // Или "yyyy-MM-dd HH:mm:ss" для 2025-07-09 12:20:38
                     dataGridView1.Columns["Date"].DefaultCellStyle.Format = "dd.MM.yyyy";
                 }
 
-                // 6. Опционально: Скрытие некоторых столбцов, если они не нужны пользователю
-                // Например, TypeId и CategoryId могут быть представлены через другие поля (Категория, Тип)
-                if (dataGridView1.Columns.Contains("TypeId")) dataGridView1.Columns["TypeId"].Visible = false;
-                if (dataGridView1.Columns.Contains("CategoryId")) dataGridView1.Columns["CategoryId"].Visible = false;
-                // Можно также скрыть IsCredit и IsDebit, если вы используете Income и Expense
-                if (dataGridView1.Columns.Contains("IsCredit")) dataGridView1.Columns["IsCredit"].Visible = false;
-                if (dataGridView1.Columns.Contains("IsDebit")) dataGridView1.Columns["IsDebit"].Visible = false;
-
-
-                // 7. Настройка разрешений для пользователя
                 dataGridView1.AllowUserToAddRows = true;
                 dataGridView1.AllowUserToDeleteRows = true;
             }
@@ -108,8 +107,102 @@ namespace Windows_Form
             {
                 MessageBox.Show("Ошибка при загрузке данных: " + ex.Message, "Ошибка", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
-        
-    }
+        }
+
+        private void BalanceAfter_Click(object sender, EventArgs e)
+        {
+
+        }
+
+        private void AddButton_Click(object sender, EventArgs e)
+        {
+            try
+            {
+                // 1. Сбор данных из элементов управления формы
+                // Валидация ввода очень важна!
+                if (!decimal.TryParse(textBoxAmount.Text, out decimal amount))
+                {
+                    MessageBox.Show("Пожалуйста, введите корректную сумму.", "Ошибка ввода", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                    return;
+                }
+
+                if (!decimal.TryParse(textBoxSalaryPercent.Text, out decimal salaryPercent))
+                {
+                    MessageBox.Show("Пожалуйста, введите корректный процент зарплаты.", "Ошибка ввода", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                    return;
+                }
+
+                if (!decimal.TryParse(textBoxBalanceAfter.Text, out decimal balanceAfter))
+                {
+                    MessageBox.Show("Пожалуйста, введите корректный баланс после операции.", "Ошибка ввода", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                    return;
+                }
+
+                // Получение ID выбранного элемента из ComboBox для TransactionType
+                // Предполагается, что ваш ComboBox привязан к List<TransactionType> и DisplayMember="Name", ValueMember="Id"
+                if (comboBoxTransactionType.SelectedValue == null)
+                {
+                    MessageBox.Show("Пожалуйста, выберите тип операции.", "Ошибка ввода", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                    return;
+                }
+                int typeId = Convert.ToInt32(comboBoxTransactionType.SelectedValue);
+
+                // Получение ID выбранного элемента из ComboBox для Category
+                if (ComboBoxCategory.SelectedValue == null)
+                {
+                    MessageBox.Show("Пожалуйста, выберите категорию.", "Ошибка ввода", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                    return;
+                }
+                int categoryId = Convert.ToInt32(ComboBoxCategory.SelectedValue);
+
+                // Создание нового объекта Finance
+                Finance newFinance = new Finance
+                {
+                    Amount = amount,
+                    SalaryPercent = salaryPercent,
+                    BalanceAfter = balanceAfter,
+                    IsCredit = IsCredit.Checked, // Получаем состояние CheckBox
+                    IsDebit = IsDebit.Checked,   // Получаем состояние CheckBox
+                    TypeId = typeId,                     // ID типа операции
+                    CategoryId = categoryId              // ID категории
+                                                         // Примечание: ID не устанавливается здесь, так как он генерируется БД
+                                                         // TransactionType и Categories не нужны здесь, так как они ссылочные и не сохраняются напрямую
+                };
+
+                // 2. Вызов метода Add из сервиса/репозитория
+                int newId = service.Add(newFinance); // Если ваш service.Add() возвращает int ID
+
+                // 3. Обработка результата
+                if (newId > 0)
+                {
+                    MessageBox.Show($"Запись успешно добавлена с ID: {newId}.", "Успех", MessageBoxButtons.OK, MessageBoxIcon.Information);
+
+                    // Очистка полей ввода после добавления (опционально)
+                    //ClearInputFields();
+
+                    // Обновление DataGridView для отображения новой записи
+                    LoadFinanceData();
+                }
+                else
+                {
+                    MessageBox.Show("Не удалось добавить запись.", "Ошибка", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                }
+            }
+            catch (FormatException fex) // Для ошибок преобразования типа (если TryParse не использовался или введен неверный формат)
+            {
+                MessageBox.Show($"Ошибка формата данных: {fex.Message}", "Ошибка ввода", MessageBoxButtons.OK, MessageBoxIcon.Error);
+            }
+            catch (Exception ex) // Общий обработчик для других ошибок
+            {
+                MessageBox.Show($"Произошла ошибка при добавлении записи: {ex.Message}", "Ошибка", MessageBoxButtons.OK, MessageBoxIcon.Error);
+            }
+        }
+
+        private void AddButton_Click_1(object sender, EventArgs e)
+        {
+
+        }
+
 
         //private void Edit_Button_Click(object sender, EventArgs e)
         //{
@@ -132,24 +225,7 @@ namespace Windows_Form
         //    LoadFinanceData();
         //}
 
-        //private void AddButton_Click(object sender, EventArgs e)
-        //{
-        //    Finance finance = new Finance
-        //    {
-        //        Amount = decimal.Parse(txtAmount.Text),
-        //        TypeId = (int)cmbType.SelectedValue,
-        //        CategoryId = (int)cmbCategory.SelectedValue,
-        //        Date = dtpDate.Value,
-        //        Description = txtDescription.Text,
-        //        SalaryPercent = decimal.Parse(txtPercent.Text),
-        //        BalanceAfter = decimal.Parse(txtBalance.Text),
-        //        IsCredit = chkCredit.Checked,
-        //        IsDebit = chkDebit.Checked
-        //    };
-
-        //    _service.Add(finance);
-        //    LoadData(); // обновим таблицу
-        //}
+      
 
 
         //private void LoadComboBoxes()
