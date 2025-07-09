@@ -167,6 +167,28 @@ namespace Windows_Form.repository
         }
 
 
+        public List<TransactionType> GetTypes()
+        {
+            List<TransactionType> types = new List<TransactionType>();
+
+            SqlConnection conn = db.getConnection();
+            using (SqlCommand cmd = new SqlCommand("SELECT Id, Name FROM TransactionType", conn))
+            {
+                conn.Open();
+                SqlDataReader reader = cmd.ExecuteReader();
+
+                while (reader.Read())
+                {
+                    types.Add(new TransactionType
+                    {
+                        Id = Convert.ToInt32(reader["Id"]),
+                        Name = reader["Name"].ToString()
+                    });
+                }
+            }
+
+            return types;
+        }
 
 
 
