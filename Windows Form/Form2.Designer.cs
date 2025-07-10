@@ -35,12 +35,12 @@
             IsCredit = new CheckBox();
             numericUpDown4 = new NumericUpDown();
             textBoxBalanceAfter = new Label();
-            numericUpDown3 = new NumericUpDown();
+            numericUpDownBalanceAfter = new NumericUpDown();
             textBoxAmount = new Label();
-            numericUpDown2 = new NumericUpDown();
+            numericUpDownSalaryPercent = new NumericUpDown();
             textBoxSalaryPercent = new Label();
             comboBoxTransactionType = new ComboBox();
-            numericUpDown1 = new NumericUpDown();
+            numericUpDownAmount = new NumericUpDown();
             ComboBoxCategory = new ComboBox();
             label_category = new TextBox();
             Edit_Button = new Button();
@@ -52,9 +52,9 @@
             ((System.ComponentModel.ISupportInitialize)dataGridView1).BeginInit();
             panel1.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)numericUpDown4).BeginInit();
-            ((System.ComponentModel.ISupportInitialize)numericUpDown3).BeginInit();
-            ((System.ComponentModel.ISupportInitialize)numericUpDown2).BeginInit();
-            ((System.ComponentModel.ISupportInitialize)numericUpDown1).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)numericUpDownBalanceAfter).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)numericUpDownSalaryPercent).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)numericUpDownAmount).BeginInit();
             tableLayoutPanel1.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)LoadIcon).BeginInit();
             SuspendLayout();
@@ -87,12 +87,12 @@
             panel1.Controls.Add(IsCredit);
             panel1.Controls.Add(numericUpDown4);
             panel1.Controls.Add(textBoxBalanceAfter);
-            panel1.Controls.Add(numericUpDown3);
+            panel1.Controls.Add(numericUpDownBalanceAfter);
             panel1.Controls.Add(textBoxAmount);
-            panel1.Controls.Add(numericUpDown2);
+            panel1.Controls.Add(numericUpDownSalaryPercent);
             panel1.Controls.Add(textBoxSalaryPercent);
             panel1.Controls.Add(comboBoxTransactionType);
-            panel1.Controls.Add(numericUpDown1);
+            panel1.Controls.Add(numericUpDownAmount);
             panel1.Controls.Add(ComboBoxCategory);
             panel1.Controls.Add(label_category);
             panel1.Dock = DockStyle.Fill;
@@ -140,12 +140,12 @@
             textBoxBalanceAfter.TextAlign = ContentAlignment.TopCenter;
             textBoxBalanceAfter.Click += BalanceAfter_Click;
             // 
-            // numericUpDown3
+            // numericUpDownBalanceAfter
             // 
-            numericUpDown3.Location = new Point(251, 206);
-            numericUpDown3.Name = "numericUpDown3";
-            numericUpDown3.Size = new Size(120, 34);
-            numericUpDown3.TabIndex = 17;
+            numericUpDownBalanceAfter.Location = new Point(251, 206);
+            numericUpDownBalanceAfter.Name = "numericUpDownBalanceAfter";
+            numericUpDownBalanceAfter.Size = new Size(120, 34);
+            numericUpDownBalanceAfter.TabIndex = 17;
             // 
             // textBoxAmount
             // 
@@ -158,12 +158,12 @@
             textBoxAmount.Text = "Количество";
             textBoxAmount.TextAlign = ContentAlignment.TopCenter;
             // 
-            // numericUpDown2
+            // numericUpDownSalaryPercent
             // 
-            numericUpDown2.Location = new Point(270, 133);
-            numericUpDown2.Name = "numericUpDown2";
-            numericUpDown2.Size = new Size(120, 34);
-            numericUpDown2.TabIndex = 11;
+            numericUpDownSalaryPercent.Location = new Point(270, 133);
+            numericUpDownSalaryPercent.Name = "numericUpDownSalaryPercent";
+            numericUpDownSalaryPercent.Size = new Size(120, 34);
+            numericUpDownSalaryPercent.TabIndex = 11;
             // 
             // textBoxSalaryPercent
             // 
@@ -178,21 +178,21 @@
             // 
             // comboBoxTransactionType
             // 
+            comboBoxTransactionType.DropDownStyle = ComboBoxStyle.DropDownList;
             comboBoxTransactionType.FormattingEnabled = true;
-            comboBoxTransactionType.Items.AddRange(new object[] { "    Доход", "    Расход" });
-            comboBoxTransactionType.Location = new Point(43, 74);
+            comboBoxTransactionType.Items.AddRange(new object[] { "Доход", "Расход" });
+            comboBoxTransactionType.Location = new Point(33, 74);
             comboBoxTransactionType.Name = "comboBoxTransactionType";
             comboBoxTransactionType.Size = new Size(121, 36);
             comboBoxTransactionType.TabIndex = 8;
-            comboBoxTransactionType.Text = "       Тип ";
+          
+            // numericUpDownAmount
             // 
-            // numericUpDown1
-            // 
-            numericUpDown1.Location = new Point(270, 76);
-            numericUpDown1.Maximum = new decimal(new int[] { -1863462912, 46, 0, 0 });
-            numericUpDown1.Name = "numericUpDown1";
-            numericUpDown1.Size = new Size(120, 34);
-            numericUpDown1.TabIndex = 7;
+            numericUpDownAmount.Location = new Point(270, 76);
+            numericUpDownAmount.Maximum = new decimal(new int[] { -1863462912, 46, 0, 0 });
+            numericUpDownAmount.Name = "numericUpDownAmount";
+            numericUpDownAmount.Size = new Size(120, 34);
+            numericUpDownAmount.TabIndex = 7;
             // 
             // ComboBoxCategory
             // 
@@ -288,9 +288,9 @@
             panel1.ResumeLayout(false);
             panel1.PerformLayout();
             ((System.ComponentModel.ISupportInitialize)numericUpDown4).EndInit();
-            ((System.ComponentModel.ISupportInitialize)numericUpDown3).EndInit();
-            ((System.ComponentModel.ISupportInitialize)numericUpDown2).EndInit();
-            ((System.ComponentModel.ISupportInitialize)numericUpDown1).EndInit();
+            ((System.ComponentModel.ISupportInitialize)numericUpDownBalanceAfter).EndInit();
+            ((System.ComponentModel.ISupportInitialize)numericUpDownSalaryPercent).EndInit();
+            ((System.ComponentModel.ISupportInitialize)numericUpDownAmount).EndInit();
             tableLayoutPanel1.ResumeLayout(false);
             ((System.ComponentModel.ISupportInitialize)LoadIcon).EndInit();
             ResumeLayout(false);
@@ -305,9 +305,9 @@
         private TextBox label_category;
         private ComboBox ComboBoxCategory;
         private System.ComponentModel.BackgroundWorker backgroundWorker1;
-        private NumericUpDown numericUpDown1;
+        private NumericUpDown numericUpDownAmount;
         private ComboBox comboBoxTransactionType;
-        private NumericUpDown numericUpDown2;
+        private NumericUpDown numericUpDownSalaryPercent;
         private Label textBoxSalaryPercent;
         private TableLayoutPanel tableLayoutPanel1;
         private Button AddButton;
@@ -315,7 +315,7 @@
         private Button Delete_Button;
         private PictureBox LoadIcon;
         private Label textBoxAmount;
-        private NumericUpDown numericUpDown3;
+        private NumericUpDown numericUpDownBalanceAfter;
         private Label textBoxBalanceAfter;
         private NumericUpDown numericUpDown4;
         private CheckBox IsDebit;
